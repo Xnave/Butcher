@@ -1,0 +1,135 @@
+<table class="table-hide-first layout display responsive-table table-buttons col-xs-3">
+    <thead>
+    <tr>
+        <th>
+            <label class="date-label time-left-label" ng-bind-html="computeRemainingTime(order)" ng-click="changeOrderDate(order.id)"></label>
+        </th>
+        <th>מוצר</th>
+        <th>כמות</th>
+        <th>האם קפוא</th>
+        <th>משקל</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr ng-repeat="orderItem in order.orderItems" ng-attr-id="{%getRowId(orderItem.id)%}" ng-init="markDone(orderItem)">
+        <td>
+            <button class="btn btn-info btn-xs table-button"
+                    ng-disabled="orderItem.id? false : isOrdersStateOpen()? true : false"
+                    ng-click="removeOrderItem(orderItem, order.id)">
+                <span class="glyphicon glyphicon-minus"> </span>
+            </button>
+        </td>
+
+        <td>
+            <label class="product-text" ng-bind="getCustomerPriceString(orderItem.product_id, order.orderer_id)"></label>
+            <br>
+            <input class="additional_details" type="text" ng-model="orderItem.additional_details" ng-click="promptAddDetails(orderItem)">
+        </td>
+
+        <td class="amount-text" ng-bind="getAmountString(orderItem)">
+        </td>
+        <td>
+            <input type="checkbox" name="is_freeze_allowed" ng-checked="orderItem.is_freeze_allowed">
+        </td>
+        <td>
+            <input type="number" ng-model="orderItem.weight" class="weight-input    ">
+            <button class="btn btn-info btn-xs table-button save-orderItem-btn"
+                    ng-click="updateItem(orderItem)">
+                <span class="glyphicon glyphicon-save"> </span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <button class="btn btn-primary btn-xs table-button add-new-order-item-btn" ng-click="addRow(newOrderItems[order.id])"
+                    ng-disabled="!isOrdersStateOpen()? true : false">
+                <span class="glyphicon glyphicon-plus"> </span>
+            </button>
+        </td>
+        <td>
+            <input type="hidden" id="product_id">
+            <input type="hidden" ng-init="newOrderItems[order.id].order_id = order.id">
+            <input type="text" class="productSelect additional_details" list="product_list" ng-model="newOrderItems[order.id].product_name"
+                   placeholder="שם מוצר">
+            <datalist id="product_list" >
+                <option ng-repeat="(id, product) in products" ng-value="product.name"></option>
+            </datalist>
+            <input type="text" class="additional_details" ng-model="newOrderItems[order.id].additional_details" ng-click="promptAddDetails(newOrderItems[order.id])"
+                   placeholder="פרטים נוספים">
+        </td>
+        <td>
+            <input type="number" name="amount" class="weight-input" ng-model="newOrderItems[order.id].amount"
+                   placeholder="כמות">
+            <select name="units" class="untis-select"
+                    ng-model="newOrderItems[order.id].units"
+                    ng-options="unit.id as unit.name for unit in units">
+            </select>
+        </td>
+        <td>
+            <input type="checkbox" name="is_freeze_allowed"
+                   ng-model="newOrderItems[order.id].is_freeze_allowed"
+                   ng-init="newOrderItems[order.id].is_freeze_allowed = false">
+        </td>
+        <td class="total-price" >
+            <label ng-bind="totalPrice(order.id, order.orderer_id)" ng-click="displayTotalCalculation(order.id, order.orderer_id)"></label>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<form >
+    <button class="btn btn-danger" ng-click="deleteOrder(order.id)" >מחק הזמנה</button>
+    <button class="btn btn-warning btn-order-done" ng-click="doneOrder(order.id)" ng-disabled="checkDoneable(order.id)" >סיים הזמנה</button>
+    <button class="btn btn-success btn-order-paid" ng-click="paidOrder(order.id)" ng-disabled="checkPaidable(order.id)" ng-init="changeOrderButtonsStateText()" >שולמה</button>
+    <button class="btn btn-info pull-left" data-toggle="modal" data-target="{%'#changeOrderModal' + order.id%}"
+            ng-disabled="!isOrdersStateOpen()? true : false">ערוך</button>
+
+    <!--<button class="btn btn-info pull-left" ng-click="changeOrderDate(order.id)" onclick="" >שנה תאריך</button>-->
+    <!--<select ng-model="newOrder.am_pm" ng-init="newOrder.am_pm = 'am'" class="select_am_pm pull-left">-->
+        <!--<option value="am" selected>בוקר</option>-->
+        <!--<option value="pm">ערב</option>-->
+    <!--</select>-->
+    <!--<input type="datetime-local" ng-model="newOrder.order_finish_date" class="form-control datetime-select-control pull-left" style="width: 200px">-->
+</form>
+
+<!-- Modal -->
+<div class="modal fade" ng-attr-id="{%'changeOrderModal' + order.id%}" ng-init="populateDeletedItems(order)" tabindex="-1" role="dialog" aria-labelledby="changeOrderModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="changeOrderModalLabel">עריכה</h4>
+            </div>
+            <form class="modal-body">
+                <input type="radio" name="edit" value="date" checked>
+                <label class="control-label">תאריך סיום</label>
+                <div>
+                    <input type="datetime-local" ng-model="changeOrderInstance.order_finish_date" class="form-control datetime-select-control">
+                    <select ng-model="changeOrderInstance.am_pm" ng-init="changeOrderInstance.am_pm = 'am'" class="select_am_pm">
+                        <option value="am" selected>בוקר</option>
+                        <option value="pm">ערב</option>
+                    </select>
+                </div>
+                <br>
+                <input type="radio" name="edit" value="items">
+                <label class="control-label">שחזר פריטים</label>
+                <span ng-repeat="orderItem in order.deletedItems">
+                    <div>
+                        <input type="checkbox" ng-attr-item-id="{%orderItem.id%}" onchange="$(this).parent().parent().siblings('input:radio').prop('checked', true)">
+                        <label ng-bind="getAmountString(orderItem)"></label>
+                        <label ng-bind="getProductNameById(orderItem.product_id)"></label>
+                        <label ng-bind="orderItem.is_freeze_allowed? ' קפוא': ''"></label>
+                        <label ng-bind="'על המשקל: '
+                        + orderItem.weight"></label>
+                    </div>
+                </span>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">סגור</button>
+                <button type="button" class="btn btn-primary" ng-click="changeOrder(order)" data-dismiss="modal">שמור</button>
+            </div>
+        </div>
+    </div>
+</div>

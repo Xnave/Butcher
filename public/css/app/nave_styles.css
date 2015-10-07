@@ -1,0 +1,215 @@
+
+/* Name Edit*/
+.createForm {
+    display: block;
+    width: 350px;
+    margin: auto;
+}
+
+/*   create brande   */
+
+.success {
+    color: green;
+    text-align: center;
+    margin: 20px auto;
+    display: block;
+}
+
+.failed {
+    color: red;
+    text-align: center;
+    margin: 20px auto;
+    display: block;
+}
+
+.create-title{
+    text-align: center;
+    font-size: 25px;
+    margin: auto auto 20px auto;
+    width: 300px;
+    text-decoration: underline;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+
+.model-tumbnail{
+    margin: 10px 0 0 10px;
+    /*min-height: 210px;*/
+}
+
+.admin-image{
+    max-height: 70px;
+    margin-bottom: 10px
+}
+
+.sub-menu li{
+    padding: 0 0 0 40px;
+}
+
+.form-control{
+    width: 85%;
+}
+
+.form-control-with-span{
+    display: initial;
+}
+
+.map-collapse{
+    height: 20px;
+    line-height: 0px;
+}
+
+#map {
+    margin: 5px 0 0 0;
+    border: 1px solid #D2D2D2;
+    border-radius: 3px;
+    width: 256px;
+    height: 256px;
+}
+
+#refresh_button{
+    vertical-align: top;
+}
+
+.btn {
+    padding: 5px 8px;
+    }
+
+.search-input{
+    display: inline;
+    width: 50%;
+    direction: rtl;
+}
+
+.btn-middle{
+    vertical-align: baseline;
+}
+
+.createOrder{
+    margin-top: 80px;
+}
+
+input.productSelect {
+    width: 100px;
+    margin: 5px 0;
+}
+
+.date-label{
+    min-width: 50px;
+}
+
+.wrapper{
+    margin-right: 5px;
+}
+
+.timePast{
+    color: red;
+}
+
+.timeFuture{
+    color: black;
+}
+
+.btn{
+    padding: 8px;
+}
+
+input.additional_details{
+    width: 100px;
+    height: 40px;
+}
+
+.weight-input {
+    width: 65px;
+    height: 40px;
+    border-style: double;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.save-orderItem-btn{
+    width: 100%;
+}
+
+.amount-text{
+    font-size: 18px;
+}
+
+.product-text{
+    font-size: 19px;
+}
+
+.untis-select{
+    height: 35px;
+    width: 100%;
+}
+
+td.total-price{
+    background-color: gainsboro !important;
+}
+
+.orderCollapse{
+    font-size: 24px;
+}
+
+.datetime-select-control{
+    width: 52%;
+    display: inline;
+    margin-bottom: 5px;
+}
+
+.select_am_pm{
+    width: 70px;
+    height: 30px;
+    vertical-align: top;
+}
+
+.selectCustomer {
+    width: 200px;
+    height: 40px;
+    font-size: 20px;
+}
+
+.orders-button-group{
+    width: 100%;
+    position: static;
+}
+
+.button-header{
+    width: 33%;
+}
+
+.button-manager {
+    width: 13%;
+}
+
+.open-orders-button{
+    background-color: rgb(255, 60, 58) !important;
+}
+
+.non-paid-orders-button{
+    background-color: #fcff58 !important;
+}
+
+.done-orders-button{
+    background-color: #18c73c !important;
+}
+
+.manage-btn{
+    width: 68px;
+    height: 50px;
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    text-align: -webkit-center;
+}
+/*.manage-orders-btn{*/
+    /*left: 80px;*/
+/*}*/
+/* End Nave Edit*/
