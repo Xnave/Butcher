@@ -1,4 +1,8 @@
+#!/bin/bash
  composer install
 
+cd /
+cd
 cd app-root/runtime/repo/
 mv .env.prod .env
+echo dont forget to chmod -x for action_hooks/post_deploy
