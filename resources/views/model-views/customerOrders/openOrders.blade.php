@@ -57,12 +57,20 @@
         </form>
     </div>
 
-    <div id="manage-view">
-        <span ng-repeat="undoneProduct in undoneProducts | orderBy:closestFinishTime">
-            <label ng-bind="undoneProduct.amount? undoneProduct.amount + ' ' + getProductNameById(undoneProduct.product_id) : ''"></label>
-            <label ng-bind="undoneProduct.amoutFreezed? undoneProduct.amoutFreezed + ' ' + getProductNameById(undoneProduct.product_id) + ' קפוא' : ''"></label>
-            <br>
-        </span>
+    <div id="manage-view" class="container">
+          <span ng-repeat="undoneProduct in undoneProducts | orderBy:closestFinishTime">
+               <ul  class="treeview">
+                   <li ng-bind="undoneProduct.amounts? undoneProduct.amounts + ' ' + getProductNameById(undoneProduct.product_id) : ''"></li>
+                   <li ng-bind="undoneProduct.amoutFreezed? undoneProduct.amoutFreezed + ' ' + getProductNameById(undoneProduct.product_id) + ' קפוא' : ''"></li>
+                    <li>eni
+                        <ul>
+                            <li>nave</li>
+                            <li>eni</li>
+                            <li>fight</li>
+                        </ul>
+                    </li>
+               </ul>
+          </span>
     </div>
 </div>
 
@@ -82,5 +90,11 @@
                 $('#manage-view').show();
             }
         }
+
+        $(document).ready(function () {
+            $('.treeview').treed({openedClass:'glyphicon-chevron-down', closedClass:'glyphicon-chevron-left'});
+            $('#manage-view').hide();
+            changeView();
+        });
     </script>
 @endsection
