@@ -80,6 +80,7 @@
 </table>
 
 <form >
+    <!--somthing to commit-->
     <button class="btn btn-danger" ng-click="deleteOrder(order.id)" >מחק הזמנה</button>
     <button class="btn btn-warning btn-order-done" ng-click="doneOrder(order.id)" ng-disabled="checkDoneable(order.id)" >סיים הזמנה</button>
     <button class="btn btn-success btn-order-paid" ng-click="paidOrder(order.id)" ng-disabled="checkPaidable(order.id)" ng-init="changeOrderButtonsStateText()" >שולמה</button>
