@@ -107,4 +107,12 @@
       <index name="users_email_unique" unique="true" columns="email"/>
     </table>
   </data-source>
+  <data-source name="MySQL - dad@127.3.156.130" uuid="616e81dc-2e18-44d2-8b2c-a8e7070bfd3d">
+    <database-info product="MySQL" version="5.5.45" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
+    <schema name="" catalog="dad"/>
+  </data-source>
 </component>

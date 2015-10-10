@@ -4,3 +4,5 @@
 _ide_helper.php
 git master password.txt
 start.cmd
+composer.lock
+composer.phar

@@ -145,7 +145,7 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
         'Illuminate\Html\HtmlServiceProvider',
-		'Laracasts\Utilities\JavaScript\JavascriptServiceProvider',
+		'Laracasts\Utilities\JavaScript\JavaScriptServiceProvider',
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 	],
 
