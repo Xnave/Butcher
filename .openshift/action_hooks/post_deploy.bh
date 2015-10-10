@@ -1,0 +1,4 @@
+ composer install
+
+cd app-root/runtime/repo/
+mv .env.prod .env
