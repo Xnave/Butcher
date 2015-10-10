@@ -56,7 +56,7 @@
             <button class="btn btn-primary" ng-click="createNewOrder(newOrder.selectedCustomer.originalObject.id)">צור הזמנה</button>
         </form>
     </div>
-{{--check--}}
+{{--check2--}}
     <div id="manage-view" class="container">
           <span ng-repeat="undoneProduct in undoneProducts | orderBy:closestFinishTime">
                <ul  class="treeview">
