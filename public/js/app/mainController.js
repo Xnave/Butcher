@@ -493,7 +493,8 @@ app.controller('controller', ['$scope', '$http', '$interval', '$sce', function($
             });
     };
 
-    $scope.getIsFreezedText  = function (orderItem) {
+    $scope.getIsFreezedText  = function (
+        orderItem) {
         return orderItem.is_freeze_allowed ? " קפוא" : "";
     };
 

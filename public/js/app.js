@@ -523,7 +523,8 @@ app.controller('controller', ['$scope', '$http', '$interval', '$sce', function($
             });
     };
 
-    $scope.getIsFreezedText  = function (orderItem) {
+    $scope.getIsFreezedText  = function (
+        orderItem) {
         return orderItem.is_freeze_allowed ? " קפוא" : "";
     };
 
@@ -643,6 +644,14 @@ function getToken(){
     return $('#token-input').attr('content');
 }
 
+/**
+ * Created by User on 21/10/2015.
+ */
+app.service('ordersService', [ function ($scope) {
+    this.getProductNameById = function (id){
+        return $scope.products[id].name;
+    };
+}]);
 function AnimateRotate(elem_id) {
     // caching the object for performance reasons
     var $elem = $('#' + elem_id);
@@ -751,12 +760,4 @@ function toMap(array){
     }, {});
 }
 
-/**
- * Created by User on 21/10/2015.
- */
-app.service('ordersService', [ function ($scope) {
-    this.getProductNameById = function (id){
-        return $scope.products[id].name;
-    };
-}]);
 //# sourceMappingURL=app.js.map

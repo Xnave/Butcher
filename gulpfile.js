@@ -1,5 +1,5 @@
 var elixir = require('laravel-elixir');
-
+var git = require('gulp-git');
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -34,5 +34,7 @@ elixir(function(mix) {
 
     mix.stylesIn("public/css/app", 'public/css/app.css');
 
-    mix.version('public/css/app.css');
+    mix.version('public/css/app.css')
+                    .pipe(git.add());
+
 });
