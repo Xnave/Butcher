@@ -208,6 +208,19 @@ td.total-price{
     left: 10px;
     bottom: 10px;
     text-align: -webkit-center;
+    z-index: 1;
+}
+
+.colored-seperator{
+    color: rgba(0, 222, 214, 0.47);
+}
+
+.blue-text{
+    color: #001DFF;
+}
+
+.manage-panel{
+    padding: 4px 8px 0;
 }
 /*.manage-orders-btn{*/
     /*left: 80px;*/

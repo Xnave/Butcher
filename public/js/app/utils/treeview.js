@@ -21,16 +21,15 @@ $.fn.extend({
         tree.addClass("tree");
         tree.find('li').has("ul").each(function () {
             var branch = $(this); //li with children ul
-            branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>");
+            //branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>");
             branch.addClass('branch');
             branch.on('click', function (e) {
                 if (this == e.target) {
                     var icon = $(this).children('i:first');
                     icon.toggleClass(openedClass + " " + closedClass);
-                    $(this).children().children().toggle();
+                    $(this).children('ul').children().toggle();
                 }
             })
-            branch.children().children().toggle();
         });
         //fire event from the dynamically added icon
         tree.find('.branch .indicator').each(function(){

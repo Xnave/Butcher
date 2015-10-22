@@ -2,7 +2,7 @@
     <thead>
     <tr>
         <th>
-            <label class="date-label time-left-label" ng-bind-html="computeRemainingTime(order)" ng-click="changeOrderDate(order.id)"></label>
+            <label class="date-label time-left-label" ng-bind-html="computeRemainingTime(order.order_finish_date)" ng-click="changeOrderDate(order.id)"></label>
         </th>
         <th>מוצר</th>
         <th>כמות</th>
@@ -48,16 +48,16 @@
                 <span class="glyphicon glyphicon-plus"> </span>
             </button>
         </td>
-        <td>
+        <td id="td-selectProduct">
             <input type="hidden" id="product_id">
             <input type="hidden" ng-init="newOrderItems[order.id].order_id = order.id">
-            <input type="text" class="productSelect additional_details" list="product_list" ng-model="newOrderItems[order.id].product_name"
+            <input type="text"   id="product_id_input" class="productSelect additional_details" list="product_list" ng-model="newOrderItems[order.id].product_name"
                    placeholder="שם מוצר">
             <datalist id="product_list" >
                 <option ng-repeat="(id, product) in products" ng-value="product.name"></option>
             </datalist>
             <input type="text" class="additional_details" ng-model="newOrderItems[order.id].additional_details" ng-click="promptAddDetails(newOrderItems[order.id])"
-                   placeholder="פרטים נוספים">
+                   placeholder="הערות">
         </td>
         <td>
             <input type="number" name="amount" class="weight-input" ng-model="newOrderItems[order.id].amount"
@@ -134,3 +134,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    $($document).ready(function () {
+//        $("#product_id_input").on('input', function () {
+//            alert('a');
+//            var val = this.value;
+//            if($('#product_list').find('option').filter(function(){
+//                        return this.value === val;
+//                    }).length) {
+//                alert(this.value);
+//            }
+//        });
+    });
+</script>

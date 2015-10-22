@@ -19,7 +19,7 @@
         {{--<button type="button" class="btn btn-lg btn-default button-manager">נהל</button>--}}
         @include('partials.messages')
 
-        <span ng-repeat="order in toArray(orders) | orderBy : '-order_finish_date' ">
+        <span ng-repeat="order in toArray(orders) | orderBy : 'order_finish_date' ">
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingOne">
                     <a class="orderCollapse" role="button" data-toggle="collapse" ng-attr-href="{%'#collapseOrder' + order.id%}" aria-expanded="false" aria-controls="collapseExample">
@@ -60,20 +60,30 @@
     <div id="manage-view" class="container">
           <span ng-repeat="undoneProduct in undoneProducts | orderBy:closestFinishTime">
                <ul  class="treeview">
-                   <li ng-bind="undoneProduct.amounts? undoneProduct.amounts + ' ' + getProductNameById(undoneProduct.product_id) : ''"></li>
-                   <li ng-bind="undoneProduct.amoutFreezed? undoneProduct.amoutFreezed + ' ' + getProductNameById(undoneProduct.product_id) + ' קפוא' : ''"></li>
-                    <li>eni
-                        <ul>
-                            <li>nave</li>
-                            <li>eni</li>
-                            <li>fight</li>
-                        </ul>
+                   <li>
+                       <div class="panel panel-default">
+                           <a class="undoneProductsCollapse" role="button" data-toggle="collapse" ng-attr-href="{%'#collapseUndoneProduct' + undoneProduct.product_id%}" aria-expanded="false" aria-controls="collapseExample">
+                                <div class="manage-panel" role="tab" id="headingOne">
+                                   <label class="blue-text">{%getProductNameById(undoneProduct.product_id) + ': ' %}</label>
+
+                                   <span ng-repeat="(key, value) in undoneProduct.amounts"> {{--| freezedFilter:false--}}
+                                       <label>{% value.amount + ' ' + key%}</label>
+                                       <label class="colored-seperator">{%'| '%}</label>
+                                   </span>
+                               </div>
+                           </a>
+                       </div>
+
+                       <ul class="panel-collapse collapse" ng-attr-id="{%'collapseUndoneProduct' + undoneProduct.product_id%}">
+                           <li ng-repeat="orderItem in undoneProduct.orderItems | orderBy:getOrderItemFinishDateMS">
+                               <label ng-bind-html="getOrdererText(orders[orderItem.order_id], getAmountString(orderItem) + getIsFreezedText(orderItem) + ' ל')"></label>
+                           </li>
+                       </ul>
                     </li>
                </ul>
           </span>
     </div>
 </div>
-
 @endsection
 
 @section('scripts')

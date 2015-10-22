@@ -17,13 +17,7 @@ app.controller('controller', ['$scope', '$http', '$interval', '$sce', function($
     $scope.orders = $scope.openOrders;
     $scope.newOrder = {};
     $scope.changeOrderInstance = {};
-
-    function toMap(array){
-        return array.reduce(function(map, obj) {
-            map[obj.id] = obj;
-            return map;
-        }, {});
-    }
+    var freezed_string = "קפוא";
 
     $scope.toArray = function (map) {
         var array_values = [];
@@ -48,18 +42,6 @@ app.controller('controller', ['$scope', '$http', '$interval', '$sce', function($
             return orderItem.amount_packages + ' ' + $scope.unitsMap[3].name;
         }
     };
-
-    function getAmount(orderItem){
-        if(orderItem.amount_product_units){
-            return orderItem.amount_product_units;
-        }
-        else if(orderItem.amount_kilo){
-            return orderItem.amount_kilo;
-        }
-        else{
-            return orderItem.amount_packages;
-        }
-    }
 
     function getUnitName(orderItem){
         if(orderItem.amount_product_units){
@@ -304,8 +286,8 @@ app.controller('controller', ['$scope', '$http', '$interval', '$sce', function($
         }
     };
 
-    $scope.computeRemainingTime = function (order) {
-        var date = parseDate(order.order_finish_date);
+    $scope.computeRemainingTime = function (finish_date) {
+        var date = parseDate(finish_date);
         var curr = new Date();
 
         var past = false;
@@ -345,7 +327,8 @@ app.controller('controller', ['$scope', '$http', '$interval', '$sce', function($
         return label;
     };
 
-    $scope.getOrdererText = function(order){
+    $scope.getOrdererText = function(order, additionalText){
+        additionalText = additionalText || "";
         var text = $scope.customers[order.orderer_id].first_name + ' ' + $scope.customers[order.orderer_id].last_name + ' ';
 
         if($scope.ordersState == PAID_ORDERS_STATE){
@@ -362,10 +345,10 @@ app.controller('controller', ['$scope', '$http', '$interval', '$sce', function($
             }
 
         } else{
-            text += $scope.computeRemainingTime(order);
+            text += $scope.computeRemainingTime(order.order_finish_date);
         }
         text = text.split('<br>').join(' ');
-        text = $sce.trustAsHtml(text);
+        text = $sce.trustAsHtml(additionalText + text);
         return text;
     };
 
@@ -510,6 +493,14 @@ app.controller('controller', ['$scope', '$http', '$interval', '$sce', function($
             });
     };
 
+    $scope.getIsFreezedText  = function (orderItem) {
+        return orderItem.is_freeze_allowed ? " קפוא" : "";
+    };
+
+    $scope.getOrderItemFinishDateMS = function (orderItem) {
+        return $scope.orders[orderItem.order_id].order_finish_date;
+    };
+
     $scope.getUndoneProducts = function(){
         var undoneProducts = {};
 
@@ -525,15 +516,36 @@ app.controller('controller', ['$scope', '$http', '$interval', '$sce', function($
         $.each(undoneOrderItems, function(idx, orderItem){
             if(!undoneProducts[orderItem.product_id]){
                 undoneProducts[orderItem.product_id] =
-                    {product_id: orderItem.product_id, amout: 0, amoutFreezed: 0, orderItems: [],
+                    {product_id: orderItem.product_id, amounts: {}, amoutFreezed: 0, orderItems: [],
                      closestFinishTime: $scope.orders[orderItem.order_id].order_finish_date};
             }
 
-            if(orderItem.is_freeze_allowed){
-                undoneProducts[orderItem.product_id].amoutFreezed += getAmount(orderItem)
-            } else{
-                undoneProducts[orderItem.product_id].amout += getAmount(orderItem)
+            var key;
+            var amount, is_freezed = false;
+            if(orderItem.amount_product_units){
+                key = $scope.unitsMap[1].name;
+                amount = orderItem.amount_product_units;
             }
+            else if(orderItem.amount_kilo){
+                key = $scope.unitsMap[2].name;
+                amount = orderItem.amount_kilo;
+            }
+            else{
+                key = $scope.unitsMap[3].name;
+                amount = orderItem.amount_packages;
+            }
+
+            if(orderItem.is_freeze_allowed){
+                key += " " + freezed_string;
+                is_freezed = true;
+            }
+
+            if(!undoneProducts[orderItem.product_id].amounts[key]){
+                undoneProducts[orderItem.product_id].amounts[key] = {amount: amount, freezed: is_freezed};
+            } else{
+                undoneProducts[orderItem.product_id].amounts[key].amount += amount;
+            }
+
             undoneProducts[orderItem.product_id].orderItems.push(orderItem);
 
             if(moment($scope.orders[orderItem.order_id].order_finish_date).isAfter(moment(undoneProducts[orderItem.product_id].closestFinishTime))){
@@ -553,6 +565,11 @@ app.controller('controller', ['$scope', '$http', '$interval', '$sce', function($
         });
     });
 
+    $scope.getCustomerFullName = function (orderItem) {
+        return $scope.customers[$scope.openOrders[orderItem.order_id].orderer_id].first_name
+            + " " + $scope.customers[$scope.openOrders[orderItem.order_id].orderer_id].last_name;
+    };
+
     $scope.getRowId = function (id){
         return 'rowid-' + id;
     };
@@ -560,6 +577,23 @@ app.controller('controller', ['$scope', '$http', '$interval', '$sce', function($
     $interval(function () {
     }, 20000)
 }]);
+
+app.filter('freezedFilter', function(){
+
+    return function(undoneProducts, query){
+        var result = {};
+        for (var i in undoneProducts){
+            result[i] = undoneProducts[i];
+        }
+
+        Object.keys(result).forEach(function (key) {
+            if(result[key].freezed != query){
+                delete result[key];
+            }
+        });
+        return result;
+    };
+});
 
 function formatDate(date){
     return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + ' ' +

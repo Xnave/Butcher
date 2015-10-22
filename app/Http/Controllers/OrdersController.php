@@ -87,9 +87,9 @@ class OrdersController extends Controller {
             \App::abort(502, 'הפריט שנבחר אינו תקין');
         }
 
-        $is_freeze_allowed = true;
+        $is_freeze_allowed = false;
         if(is_null(\Input::get('is_freeze_allowed'))){
-            $is_freeze_allowed = false;
+            $is_freeze_allowed = true;
         }
 
         $units = \Input::get('units');
